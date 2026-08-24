@@ -48,31 +48,43 @@ function setApiKey(key) {
 }
 
 async function callGemini(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
-  const body = {
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: { temperature: 0.85, maxOutputTokens: 3000 },
-    safetySettings: [
-      { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
-      { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
-      { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
-      { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
-    ],
-  };
+  const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash", "gemini-2.5-pro"];
+  let lastError = null;
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.apiKey}`;
+      const body = {
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.85, maxOutputTokens: 3000 },
+        safetySettings: [
+          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+          { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
+        ],
+      };
 
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err?.error?.message || "Gemini API error");
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      }
+
+      const err = await response.json();
+      lastError = err?.error?.message || `HTTP ${response.status} for ${model}`;
+      console.warn(`Model ${model} failed, trying next model... (${lastError})`);
+    } catch (e) {
+      lastError = e.message;
+    }
   }
 
-  const data = await response.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  throw new Error(lastError || "Gemini API error across all models");
 }
 
 // ─── Prompt Builder ─────────────────────────────────────
@@ -1133,7 +1145,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   console.log(
-    "%c🧠 NeuroSketch%c\nAI-Powered Mind Map Generator\nPowered by Google Gemini 1.5 Flash",
+    "%c🧠 NeuroSketch%c\nAI-Powered Mind Map Generator\nPowered by Google Gemini 2.5 Flash",
     "font-size:20px; font-weight:bold; color:#a855f7;",
     "font-size:12px; color:#64748b;"
   );
