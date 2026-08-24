@@ -72,6 +72,9 @@
         <span class="badge-dot"></span>
         <span>Powered by Gemini AI</span>
       </div>
+      <button class="nav-settings" id="openSettings" title="API Key Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </button>
       <button class="nav-logout" id="logoutBtn" onclick="logoutUser()" title="Sign Out">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
         <span id="navUserName">Sign Out</span>
@@ -446,6 +449,31 @@
 
   <!-- Toast Notification -->
   <div class="toast" id="toast"></div>
+
+  <!-- Settings Modal (API Key) -->
+  <div class="modal-overlay" id="settingsModal" style="display:none;">
+    <div class="modal-box" style="max-width:460px;">
+      <button class="modal-close" id="settingsClose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div class="modal-icon">⚙️</div>
+      <h2 class="modal-title">API Key Settings</h2>
+      <p class="modal-desc" style="font-size:0.88rem;">Paste your Google Gemini API key below. Get one free at <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:#06b6d4;">aistudio.google.com</a></p>
+      <div style="display:flex;gap:0.75rem;margin-bottom:1rem;">
+        <input
+          type="password"
+          id="settingsApiInput"
+          placeholder="Paste your API key here..."
+          style="flex:1;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.75rem 1rem;color:#f8fafc;font-family:Outfit,sans-serif;font-size:0.9rem;outline:none;"
+        />
+        <button
+          id="settingsSaveBtn"
+          style="padding:0.75rem 1.2rem;background:linear-gradient(135deg,#a855f7,#06b6d4);color:white;border:none;border-radius:10px;font-weight:700;font-family:Outfit,sans-serif;cursor:pointer;white-space:nowrap;"
+        >Save</button>
+      </div>
+      <p id="settingsStatus" style="font-size:0.8rem;color:#22c55e;display:none;">✅ Key saved!</p>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>

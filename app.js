@@ -42,11 +42,12 @@ const CARD_GRADIENTS = [
 const EMOJIS = ["🧠", "⚡", "🌊", "🔥", "🌟", "🎯", "🔬", "💡", "🌀", "🎭", "🔮", "🌍"];
 
 // ─── Gemini API ────────────────────────────────────────
+function setApiKey(key) {
+  state.apiKey = key;
+  localStorage.setItem("neuro_api_key", key);
+}
+
 async function callGemini(prompt) {
-  if (!state.apiKey) {
-    showToast("⚠️ Please set your Gemini API key first!", "error");
-    return null;
-  }
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.apiKey}`;
   const body = {
     contents: [{ parts: [{ text: prompt }] }],
@@ -1099,6 +1100,37 @@ document.addEventListener("DOMContentLoaded", () => {
   setupCanvasControls();
   setupActionButtons();
   setupModal();
+
+  // ── Settings Modal (API Key — no validation) ──
+  const openSettings = document.getElementById("openSettings");
+  const settingsModal = document.getElementById("settingsModal");
+  const settingsClose = document.getElementById("settingsClose");
+  const settingsInput = document.getElementById("settingsApiInput");
+  const settingsSave  = document.getElementById("settingsSaveBtn");
+  const settingsStatus = document.getElementById("settingsStatus");
+
+  if (openSettings) {
+    // Pre-fill with existing key
+    if (state.apiKey && settingsInput) settingsInput.value = state.apiKey;
+
+    openSettings.addEventListener("click", () => {
+      settingsModal.style.display = "flex";
+      if (settingsInput) settingsInput.focus();
+    });
+    settingsClose.addEventListener("click", () => { settingsModal.style.display = "none"; });
+    settingsModal.addEventListener("click", (e) => { if (e.target === settingsModal) settingsModal.style.display = "none"; });
+
+    settingsSave.addEventListener("click", () => {
+      const key = settingsInput.value.trim();
+      if (!key) { showToast("⚠️ Please paste your API key first", "error"); return; }
+      setApiKey(key);
+      settingsStatus.style.display = "block";
+      showToast("🔑 API Key saved!", "success");
+      setTimeout(() => { settingsModal.style.display = "none"; settingsStatus.style.display = "none"; }, 1200);
+    });
+
+    settingsInput.addEventListener("keydown", (e) => { if (e.key === "Enter") settingsSave.click(); });
+  }
 
   console.log(
     "%c🧠 NeuroSketch%c\nAI-Powered Mind Map Generator\nPowered by Google Gemini 1.5 Flash",

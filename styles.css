@@ -244,6 +244,19 @@ input, textarea { font-family: var(--font-main); }
 }
 .nav-logout:hover { background: rgba(239,68,68,0.15); color: #ef4444; border-color: rgba(239,68,68,0.4); }
 
+.nav-settings {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-muted);
+}
+.nav-settings:hover { background: rgba(168,85,247,0.15); border-color: rgba(168,85,247,0.3); color: var(--purple-1); }
+.nav-settings svg { stroke: currentColor; }
+
 .badge-dot {
   width: 6px; height: 6px;
   border-radius: 50%;
