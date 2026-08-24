@@ -48,7 +48,7 @@ function setApiKey(key) {
 }
 
 async function callGemini(prompt) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.apiKey}`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.apiKey}`;
   const body = {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: { temperature: 0.85, maxOutputTokens: 3000 },
@@ -1090,7 +1090,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const nameEl = document.getElementById("navUserName");
       if (nameEl) nameEl.textContent = `Hi, ${user.name.split(" ")[0]}`;
     }
-  } catch(e) {}
+  } catch (e) { }
   initParticles();
   createDemoMindmap();
   setupScrollHeader();
@@ -1106,7 +1106,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const settingsModal = document.getElementById("settingsModal");
   const settingsClose = document.getElementById("settingsClose");
   const settingsInput = document.getElementById("settingsApiInput");
-  const settingsSave  = document.getElementById("settingsSaveBtn");
+  const settingsSave = document.getElementById("settingsSaveBtn");
   const settingsStatus = document.getElementById("settingsStatus");
 
   if (openSettings) {
