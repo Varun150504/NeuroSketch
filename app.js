@@ -118,11 +118,6 @@ Rules:
 
 // ─── Main Generation Flow ─────────────────────────────
 async function generateMindMap(topic) {
-  if (!state.apiKey) {
-    showToast("🔑 Please configure your Gemini API key first!", "error");
-    document.getElementById("toggleApiKey").click();
-    return;
-  }
 
   state.currentTopic = topic;
 
@@ -986,57 +981,7 @@ function setupCardAnimations() {
   });
 }
 
-// ─── API Key Management ───────────────────────────────
-function setupApiKey() {
-  const banner = document.getElementById("apiBanner");
-  const panel = document.getElementById("apiKeyPanel");
-  const input = document.getElementById("apiKeyInput");
-  const saveBtn = document.getElementById("saveApiKey");
-  const toggleBtn = document.getElementById("toggleApiKey");
 
-  // If key already exists, update banner
-  if (state.apiKey) {
-    banner.innerHTML = `
-      <div class="api-banner-icon">✅</div>
-      <div class="api-banner-text">
-        <strong>API Key Configured</strong>
-        <span>Gemini AI is ready to generate your mind maps</span>
-      </div>
-      <button class="btn-api" id="toggleApiKey">Change Key</button>
-    `;
-    document.getElementById("toggleApiKey").addEventListener("click", () => {
-      panel.style.display = panel.style.display === "none" ? "block" : "none";
-    });
-    if (input) input.value = state.apiKey;
-  }
-
-  toggleBtn.addEventListener("click", () => {
-    panel.style.display = panel.style.display === "none" ? "block" : "none";
-  });
-
-  saveBtn.addEventListener("click", () => {
-    const key = input.value.trim();
-    if (!key || !key.startsWith("AIza")) {
-      showToast("⚠️ Please enter a valid API key (starts with AIza...)", "error");
-      return;
-    }
-    state.apiKey = key;
-    localStorage.setItem("neuro_api_key", key);
-    panel.style.display = "none";
-    banner.innerHTML = `
-      <div class="api-banner-icon">✅</div>
-      <div class="api-banner-text">
-        <strong>API Key Saved!</strong>
-        <span>Gemini AI is ready — try generating a mind map below</span>
-      </div>
-      <button class="btn-api" id="changeApiKey">Change Key</button>
-    `;
-    document.getElementById("changeApiKey")?.addEventListener("click", () => {
-      panel.style.display = "block";
-    });
-    showToast("🔑 API Key saved successfully!", "success");
-  });
-}
 
 // ─── Main Input Setup ─────────────────────────────────
 function setupInput() {
@@ -1149,7 +1094,6 @@ document.addEventListener("DOMContentLoaded", () => {
   createDemoMindmap();
   setupScrollHeader();
   setupCardAnimations();
-  setupApiKey();
   setupInput();
   setupTabs();
   setupCanvasControls();
