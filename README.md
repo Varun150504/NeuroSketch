@@ -9,7 +9,7 @@
 </p>
 
 > **College Project — Generative AI Course**  
-> Transform any topic into an interactive, AI-generated mind map with concepts, connections, a narrative story, and a quiz — powered by Google Gemini 1.5 Flash.
+> Transform any topic into an interactive, AI-generated mind map with concepts, connections, a narrative story, and a quiz — powered by Google Gemini 2.5 Flash.
 
 ---
 
@@ -110,7 +110,7 @@ JSON Response Parsing
 | **HTML5** | Semantic structure, Canvas API |
 | **CSS3** | Glassmorphism, CSS variables, keyframe animations |
 | **Vanilla JavaScript** | ES2022, Canvas 2D API, Fetch API |
-| **Google Gemini 1.5 Flash** | JSON-structured concept generation, storytelling, quiz |
+| **Google Gemini 2.5 Flash** | JSON-structured concept generation, storytelling, quiz |
 | **No frameworks** | Pure HTML/CSS/JS — zero dependencies |
 
 ---
