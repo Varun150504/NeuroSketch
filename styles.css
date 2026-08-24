@@ -227,6 +227,23 @@ input, textarea { font-family: var(--font-main); }
   border-radius: 100px;
 }
 
+.nav-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  padding: 0.4rem 0.9rem;
+  border-radius: 100px;
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-logout:hover { background: rgba(239,68,68,0.15); color: #ef4444; border-color: rgba(239,68,68,0.4); }
+
 .badge-dot {
   width: 6px; height: 6px;
   border-radius: 50%;

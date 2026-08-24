@@ -1129,8 +1129,22 @@ function setupModal() {
   });
 }
 
+// ─── Logout ───────────────────────────────────────────
+function logoutUser() {
+  localStorage.removeItem("neuro_logged_in");
+  window.location.href = "login.html";
+}
+
 // ─── Initialize Everything ────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
+  // Show logged-in user name in nav
+  try {
+    const user = JSON.parse(localStorage.getItem("neuro_logged_in") || "{}");
+    if (user.name) {
+      const nameEl = document.getElementById("navUserName");
+      if (nameEl) nameEl.textContent = `Hi, ${user.name.split(" ")[0]}`;
+    }
+  } catch(e) {}
   initParticles();
   createDemoMindmap();
   setupScrollHeader();

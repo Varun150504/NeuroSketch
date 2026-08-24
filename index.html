@@ -10,6 +10,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script>
+    // Auth guard — redirect to login if not signed in
+    (function() {
+      if (!localStorage.getItem('neuro_logged_in')) {
+        window.location.href = 'login.html';
+      }
+    })();
+  </script>
 </head>
 <body>
 
@@ -64,6 +72,10 @@
         <span class="badge-dot"></span>
         <span>Powered by Gemini AI</span>
       </div>
+      <button class="nav-logout" id="logoutBtn" onclick="logoutUser()" title="Sign Out">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <span id="navUserName">Sign Out</span>
+      </button>
     </nav>
   </header>
 
