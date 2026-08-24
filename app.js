@@ -304,12 +304,12 @@ async function generateMindMap(topic) {
       node.gradient = CARD_GRADIENTS[i % CARD_GRADIENTS.length];
     });
 
-    // Render results
-    renderResults(data);
-
     document.getElementById("loadingState").style.display = "none";
     document.getElementById("resultsArea").style.display = "block";
     document.getElementById("mapTopicLabel").textContent = `Topic: ${data.topic}`;
+
+    // Render results after elements are visible so canvas container measurements are accurate
+    renderResults(data);
 
     showToast("✨ Mind map generated successfully!", "success");
   } catch (err) {
@@ -322,10 +322,13 @@ async function generateMindMap(topic) {
         node.color = NODE_COLORS[i % NODE_COLORS.length];
         node.gradient = CARD_GRADIENTS[i % CARD_GRADIENTS.length];
       });
-      renderResults(data);
+
       document.getElementById("loadingState").style.display = "none";
       document.getElementById("resultsArea").style.display = "block";
       document.getElementById("mapTopicLabel").textContent = `Topic: ${data.topic}`;
+
+      renderResults(data);
+
       showToast("✨ Mind map generated successfully!", "success");
     } catch (e2) {
       document.getElementById("loadingState").style.display = "none";
@@ -395,16 +398,15 @@ function renderMindMapCanvas(data) {
   const canvas = document.getElementById("mindmapCanvas");
   const ctx = canvas.getContext("2d");
 
-  // Set canvas resolution
+  const W = container.clientWidth || 800;
+  const H = container.clientHeight || 500;
   const dpr = window.devicePixelRatio || 1;
-  canvas.width = container.clientWidth * dpr;
-  canvas.height = container.clientHeight * dpr;
-  canvas.style.width = container.clientWidth + "px";
-  canvas.style.height = container.clientHeight + "px";
-  ctx.scale(dpr, dpr);
 
-  const W = container.clientWidth;
-  const H = container.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + "px";
+  canvas.style.height = H + "px";
+
   const cx = W / 2;
   const cy = H / 2;
   const radius = Math.min(W, H) * 0.34;
@@ -435,8 +437,12 @@ function renderMindMapCanvas(data) {
     if (!animStart) animStart = timestamp;
     const elapsed = timestamp - animStart;
 
-    ctx.clearRect(0, 0, W, H);
+    // Reset transform & clear canvas
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     ctx.save();
+    ctx.scale(dpr, dpr);
     ctx.translate(state.canvas.offsetX, state.canvas.offsetY);
     ctx.scale(state.canvas.scale, state.canvas.scale);
 
@@ -479,6 +485,8 @@ function renderMindMapCanvas(data) {
       const p = easeOutCubic(progress);
       drawNode(ctx, np.x, np.y, np.node, p);
     });
+
+    ctx.restore();
 
     animationFrameId = requestAnimationFrame(draw);
   }
